@@ -45,8 +45,7 @@ class yaspybot(object):
 					self._process_line(line)
 
 	def _send_command(self, string):
-		output = string + '\r\n'
-		self._socket.send(output.encode('utf-8'))
+		self._socket.send((string + '\r\n').encode('utf-8'))
 		print(string)
 
 	def _say(self, string, channel):
@@ -58,7 +57,7 @@ class yaspybot(object):
 			where = line[line.index(' PRIVMSG ') + 9:line.index(' :')]
 			what = line[line.index(' :') + 2:]
 		except:
-			return None
+			return
 		
 		if where == NICK:
 			where = who
@@ -72,12 +71,12 @@ class yaspybot(object):
 			try:
 				arg = int(what[8:], 16)
 			except:
-				self._say('%s: %s is not valid hex.' % what[8:], where)
-				return None
+				self._say('%s: \'%s\' is not valid hex.' % (who, what[8:]), where)
+				return
 			if arg in range(0x0, 0x110000):
 				if arg in range(0xD800, 0xDFFF):
 					self._say('%s: \'%s\' is a lone surrogate and can not be printed seperately.' % (who, hex(arg)), where)
-					return None
+					return
 				self._say('%s: %s' % (who, chr(arg)), where)
 			else:
 				self._say('%s: \'%s\' is not a valid unicode codepoint.' % (who, hex(arg)), where)
