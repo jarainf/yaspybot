@@ -1,4 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+# Author: Jan 'jarainf' Rathner <jan@rathner.net>
 
 import socket
 from os import linesep
